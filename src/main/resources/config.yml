@@ -1,0 +1,869 @@
+# =========================================================
+#  PrisonCore - main config
+#  Colors/formatting use MiniMessage: https://docs.advntr.dev/minimessage/format.html
+# =========================================================
+
+# Don't touch: used to update this file automatically on new versions.
+config-version: 25
+
+# Players keep their items and XP when they die.
+keep-inventory: true
+
+starting-money: 0
+starting-tokens: 0
+autosave-minutes: 2
+
+pickaxe:
+  # Give a prison pickaxe on join/respawn to anyone who doesn't have one in their inventory.
+  give-if-missing: true
+  prevent-drop: true
+
+mines:
+  # Block players (without prisoncore.build) from breaking/placing outside mines.
+  protect-outside-mines: true
+  # Worlds where that protection applies. Empty list = every world.
+  protected-worlds: []
+  # How many blocks are refilled per tick during a reset (lower = smoother, slower).
+  # Build the bedrock box (walls + floor, 1-block air gap) automatically on /mine create.
+  # It replaces whatever is in that space. Rebuild any time with /mine shell <mine>.
+  auto-shell: true
+  blocks-per-tick: 30000
+  # Blocks placed per tick while /pa setupmines builds the mine plots.
+  paste-blocks-per-tick: 20000
+  # Where players inside a mine go when it resets:
+  #   top   = lifted straight up onto the top of the mine (same spot)
+  #   spawn = the mine's spawn point (/mine setspawn)
+  reset-teleport: top
+  menu-title: "<dark_gray>Mines"
+
+# Warning while mining with a full Ore Bag: action bar + sound every 2s, a big title every title-seconds.
+bag-full-alert:
+  enabled: true
+  title-seconds: 30
+
+autosell:
+  # New players start with autosell on/off (needs prisoncore.autosell to use).
+  default-enabled: true
+  # Autosell sells the bag + inventory once every this many minutes (one clock for everyone).
+  # Between sales everything has to fit in the ore bag, so bag upgrades matter. 0 = sell every block instantly (old way).
+  interval-minutes: 15
+  # Every prestige takes this many minutes off the timer, never going below min-minutes.
+  # 0.5 -> P1 14m30s, P10 10m, P20 5m
+  minus-per-prestige: 0.5
+  min-minutes: 5
+  # Paid ranks shave more minutes off, but autosell is never faster than this.
+  donor-floor-minutes: 1
+  # Only used when interval-minutes is 0: sell what doesn't fit instead of losing it.
+  sell-when-inventory-full: false
+
+tokens:
+  # Chance (%) to earn tokens for each block mined (no enchant needed). 50 = about 1 token every 2 blocks.
+  per-block-chance: 50
+  per-block-amount: 25
+  # Tokens per block broken by Explosive / Jackhammer.
+  per-proc-block: 0.5
+
+# Extra sell multiplier from permissions: prisoncore.multiplier.<name>
+# Only the highest one applies. 0.25 = +25%
+permission-multipliers:
+  spark: 0.10
+  ion: 0.20
+  nova: 0.35
+  pulsar: 0.50
+  quasar: 0.75
+  nebula: 1.00
+  singularity: 1.50
+
+# Vault: other plugins (shops, auctions, jobs...) use PrisonCore money automatically
+# when Vault is installed. These only change how they display it.
+vault:
+  currency-symbol: "$"
+  currency-singular: "Dollar"
+  currency-plural: "Dollars"
+
+# Top lists for %prisoncore_top_...% placeholders (holograms, tab). Rebuilt every X minutes.
+leaderboards:
+  update-minutes: 5
+  # Big leaderboard walls (text displays). yaw -90 = text faces east. scale = text size.
+  displays:
+    money:    {board: money,    title: "<aqua><b>TOP MONEY",         world: spawn, x: -49.9, y: 103.6, z: -8.5, yaw: -90, scale: 1.45}
+    prestige: {board: prestige, title: "<light_purple><b>TOP PRESTIGE", world: spawn, x: -49.9, y: 103.6, z: 0.5,  yaw: -90, scale: 1.45}
+    blocks:   {board: blocks,   title: "<yellow><b>TOP BLOCKS MINED", world: spawn, x: -49.9, y: 103.6, z: 9.5,  yaw: -90, scale: 1.45}
+
+crates:
+  # world = rewards orbit the crate and the prize pops out above it (everyone sees it); gui = spinning menu
+  animation-style: world
+  hologram-height: 1.6
+  mass-open-max: 64
+
+chat:
+  # {title} = donor rank / clearance / chosen title (/prefix), {name} = name color + nickname, {suffix} = /suffix.
+  # Turn off if you use a chat plugin.
+  enabled: true
+  format: "{title}{prestige}{rank} {name}{suffix}<dark_gray> » "
+
+scoreboard:
+  enabled: true
+  update-ticks: 20
+  title: "<gradient:#ffd166:#ef476f><b>  PRISON  </b></gradient>"
+  # Placeholders: {player} {rank} {rank_prefix} {next_rank} {prestige} {money} {tokens} {blocks}
+  # {multiplier} {rankup_cost} {progress} {progress_bar} {mine} {mine_reset} {online} {bag} {autosell}  (max 15 lines)
+  lines:
+    - "<gold><b>Player"
+    - " <gray>Rank: {rank_prefix}"
+    - " <gray>Prestige: <light_purple>{prestige}"
+    - " <gray>Multiplier: <aqua>x{multiplier}"
+    - ""
+    - "<gold><b>Economy"
+    - " <gray>Money: <green>${money}"
+    - " <gray>Tokens: <yellow>{tokens}"
+    - " <gray>Cores: <#3ab8ff>◉ <#7fd8ff>{cores}"
+    - " <gray>Blocks: <white>{blocks}"
+    - " <gray>Bag: <white>{bag} <dark_gray>⟳<white>{autosell}"
+    - " "
+    - "<gold><b>Rankup <gray>({next_rank})"
+    - " {progress_bar} <white>{progress}%"
+    - "<dark_gray><st>                    </st>"
+
+# Block mixes for each rank's mine. Used automatically by /mine create <rank>,
+# or apply to an existing mine with /mine preset <mine> [preset]. Weights don't need to add to 100.
+mine-presets:
+  A: "STONE:80 COAL_ORE:20"
+  B: "STONE:65 COAL_ORE:28 IRON_ORE:7"
+  C: "STONE:50 COAL_ORE:30 IRON_ORE:20"
+  D: "ANDESITE:40 COAL_ORE:30 IRON_ORE:25 COPPER_ORE:5"
+  E: "ANDESITE:30 COAL_ORE:25 IRON_ORE:30 COPPER_ORE:15"
+  F: "DIORITE:30 IRON_ORE:35 COPPER_ORE:20 GOLD_ORE:15"
+  G: "GRANITE:25 IRON_ORE:30 GOLD_ORE:25 DEEPSLATE_COAL_ORE:20"
+  H: "DEEPSLATE:30 DEEPSLATE_IRON_ORE:30 GOLD_ORE:25 REDSTONE_ORE:15"
+  I: "DEEPSLATE:25 DEEPSLATE_GOLD_ORE:30 REDSTONE_ORE:30 LAPIS_ORE:15"
+  J: "DEEPSLATE:20 DEEPSLATE_REDSTONE_ORE:30 LAPIS_ORE:30 DEEPSLATE_GOLD_ORE:20"
+  K: "DEEPSLATE:15 DEEPSLATE_LAPIS_ORE:30 DIAMOND_ORE:20 DEEPSLATE_GOLD_ORE:35"
+  L: "DEEPSLATE_DIAMOND_ORE:30 DEEPSLATE_GOLD_ORE:35 DEEPSLATE_REDSTONE_ORE:35"
+  M: "DEEPSLATE_DIAMOND_ORE:40 NETHER_QUARTZ_ORE:35 EMERALD_ORE:25"
+  N: "DEEPSLATE_DIAMOND_ORE:40 EMERALD_ORE:40 OBSIDIAN:20"
+  O: "EMERALD_ORE:35 DEEPSLATE_EMERALD_ORE:25 COAL_BLOCK:40"
+  P: "DEEPSLATE_EMERALD_ORE:40 COAL_BLOCK:30 PURPUR_BLOCK:30"
+  Q: "IRON_BLOCK:35 PURPUR_BLOCK:35 DEEPSLATE_EMERALD_ORE:30"
+  R: "GOLD_BLOCK:30 LAPIS_BLOCK:40 REDSTONE_BLOCK:30"
+  S: "GOLD_BLOCK:55 QUARTZ_BLOCK:10 SEA_LANTERN:5 PRISMARINE:30"
+  T: "QUARTZ_BLOCK:35 SEA_LANTERN:25 GOLD_BLOCK:40"
+  U: "DIAMOND_BLOCK:40 QUARTZ_BLOCK:40 SEA_LANTERN:20"
+  V: "DIAMOND_BLOCK:60 EMERALD_BLOCK:20 SEA_LANTERN:20"
+  W: "EMERALD_BLOCK:50 DIAMOND_BLOCK:30 AMETHYST_BLOCK:20"
+  X: "AMETHYST_BLOCK:60 EMERALD_BLOCK:38 NETHERITE_BLOCK:2"
+  Y: "AMETHYST_BLOCK:50 EMERALD_BLOCK:45 NETHERITE_BLOCK:5"
+  Z: "EMERALD_BLOCK:60 AMETHYST_BLOCK:30 NETHERITE_BLOCK:10"
+
+# What ores drop when mined. "ITEM:amount" (Fortune multiplies this). Blocks not listed drop themselves.
+ore-drops:
+  COAL_ORE: "COAL"
+  DEEPSLATE_COAL_ORE: "COAL:2"
+  COPPER_ORE: "COPPER_INGOT:2"
+  DEEPSLATE_COPPER_ORE: "COPPER_INGOT:3"
+  IRON_ORE: "IRON_INGOT"
+  DEEPSLATE_IRON_ORE: "IRON_INGOT:2"
+  GOLD_ORE: "GOLD_INGOT"
+  DEEPSLATE_GOLD_ORE: "GOLD_INGOT:2"
+  NETHER_GOLD_ORE: "GOLD_INGOT:3"
+  REDSTONE_ORE: "REDSTONE:4"
+  DEEPSLATE_REDSTONE_ORE: "REDSTONE:6"
+  LAPIS_ORE: "LAPIS_LAZULI:4"
+  DEEPSLATE_LAPIS_ORE: "LAPIS_LAZULI:6"
+  NETHER_QUARTZ_ORE: "QUARTZ"
+  DIAMOND_ORE: "DIAMOND"
+  DEEPSLATE_DIAMOND_ORE: "DIAMOND:2"
+  EMERALD_ORE: "EMERALD"
+  DEEPSLATE_EMERALD_ORE: "EMERALD:2"
+  ANCIENT_DEBRIS: "NETHERITE_SCRAP"
+
+# Condensing: every <amount> of one tier automatically turns into 1 of the next, in the inventory.
+#   item (Coal) -> block (Coal Block) -> Enchanted Coal -> Enchanted Coal Block
+# Each tier is worth amount x value-bonus x the tier below, so condensing never loses money.
+# Players can also run /condense. Enchanted items can't be placed or crafted with.
+condense:
+  # Off: condensing let the inventory hold endless ore and made the Ore Bag pointless.
+  # Enchanted items players already have still sell and can go in the bag.
+  enabled: false
+  amount: 64
+  value-bonus: 1.0
+  enchanted-name: "<aqua>Enchanted {item}"
+  enchanted-block-name: "<light_purple>Enchanted {item}"
+  # Removes vanilla 9-item block recipes (they would turn 9 coal into a block worth 64)
+  disable-vanilla-block-recipes: true
+  chains:
+    coal: [COAL, COAL_BLOCK]
+    copper: [COPPER_INGOT, COPPER_BLOCK]
+    iron: [IRON_INGOT, IRON_BLOCK]
+    gold: [GOLD_INGOT, GOLD_BLOCK]
+    redstone: [REDSTONE, REDSTONE_BLOCK]
+    lapis: [LAPIS_LAZULI, LAPIS_BLOCK]
+    quartz: [QUARTZ, QUARTZ_BLOCK]
+    diamond: [DIAMOND, DIAMOND_BLOCK]
+    emerald: [EMERALD, EMERALD_BLOCK]
+    amethyst: [AMETHYST_SHARD, AMETHYST_BLOCK]
+    netherite: [NETHERITE_SCRAP, NETHERITE_BLOCK]
+
+# Price per item when sold. Any block you put in a mine should have a price here.
+sell-prices:
+  # Stone-type blocks (drop themselves)
+  STONE: 1
+  COBBLESTONE: 1
+  ANDESITE: 1.5
+  DIORITE: 1.5
+  GRANITE: 1.5
+  NETHERRACK: 2
+  DEEPSLATE: 3
+  COBBLED_DEEPSLATE: 3
+  END_STONE: 25
+  OBSIDIAN: 80
+  PRISMARINE: 250
+  PURPUR_BLOCK: 300
+  SEA_LANTERN: 2000
+  # Ore drops (tier 1 of each condense chain). Their blocks and enchanted versions
+  # are priced automatically: block = 64x, enchanted = 64x block, enchanted block = 64x that.
+  COAL: 4
+  COPPER_INGOT: 3
+  IRON_INGOT: 8
+  GOLD_INGOT: 15
+  REDSTONE: 5
+  LAPIS_LAZULI: 6
+  QUARTZ: 40
+  DIAMOND: 60
+  EMERALD: 100
+  AMETHYST_SHARD: 100
+  NETHERITE_SCRAP: 1500
+
+# Moving arrows on the spawn floor that lead new players around. Points are "x,y,z" (y = floor height) in the guide world.
+guides:
+  enabled: true
+  world: spawn
+  spacing: 3.0        # blocks between arrows
+  speed: 3.0          # blocks per second
+  scale: 2.5
+  height: 0.06        # how far above the floor
+  fade-distance: 1.5  # arrows grow in at the start and shrink out at the end
+  update-ticks: 2
+  paths:
+    mines:
+      text: "<light_purple>➤"
+      points:
+        - "0.5,100,41.5"
+        - "0.5,100,37.5"
+        - "5.5,100,33.5"
+        - "5.5,100,15.5"
+        - "6.5,100,13.5"
+        - "6.5,100,11.5"
+        - "5.5,100,8.93"
+        - "7.08,100,7.77"
+        - "8.39,100,6.32"
+        - "9.38,100,4.64"
+        - "10.03,100,2.79"
+        - "10.29,100,0.86"
+        - "10.17,100,-1.09"
+        - "9.66,100,-2.98"
+        - "8.79,100,-4.73"
+        - "7.59,100,-6.27"
+        - "6.1,100,-7.54"
+        - "4.4,100,-8.49"
+        - "2.54,100,-9.09"
+        - "1.5,100,-12.5"
+        - "1.5,100,-16.5"
+        - "5.5,100,-19"
+        - "5.5,100,-29.5"
+        - "4.5,100,-30"
+        - "3.5,100.5,-30.5"
+        - "3.5,101.5,-31.5"
+        - "3.5,102.5,-32.5"
+        - "3.5,103,-33.5"
+        - "3.5,103,-34.5"
+        - "0.5,103,-37.5"
+        - "0.5,103,-47.5"
+    crates:
+      text: "<gold>➤"
+      points:
+        - "0.5,100,41.5"
+        - "0.5,100,37.5"
+        - "5.5,100,33.5"
+        - "5.5,100,15.5"
+        - "6.5,100,13.5"
+        - "6.5,100,11.5"
+        - "5.5,100,8.93"
+        - "6.88,100,7.94"
+        - "8.06,100,6.74"
+        - "9.02,100,5.35"
+        - "9.72,100,3.81"
+        - "10.15,100,2.18"
+        - "10.3,100,0.5"
+        - "42.5,100,0.5"
+    leaderboards:
+      text: "<aqua>➤"
+      points:
+        - "0.5,100,41.5"
+        - "0.5,100,37.5"
+        - "-4.5,100,33.5"
+        - "-4.5,100,18.5"
+        - "-1.5,100,16"
+        - "-0.86,100,10.2"
+        - "-2.81,100,9.73"
+        - "-4.61,100,8.86"
+        - "-6.2,100,7.65"
+        - "-7.51,100,6.14"
+        - "-8.49,100,4.4"
+        - "-9.1,100,2.49"
+        - "-9.3,100,0.5"
+        - "-46.5,100,0.5"
+
+# Shown to a player the very first time they join.
+# New player tutorial (starts on first join, /tutorial replays): navigator -> pmine -> mine -> bag -> sell -> rankup -> enchants
+tutorial:
+  enabled: true
+  start-delay-ticks: 160
+  mine-blocks: 50
+  reward-commands: ["crate givekey %player% common 3", "crate givekey %player% rare 1"]
+  reward-text: "<gray>3x Common Key + 1x Rare Key"
+
+first-join:
+  enabled: true
+  delay-ticks: 30
+  # Starter items besides the pickaxe, Ore Bag and Colony Navigator (console commands, %player%)
+  commands: ["crate givekey %player% common 1"]
+  title: "<gradient:#55ffff:#aa55ff><bold>WELCOME</bold></gradient>"
+  subtitle: "<gray>New here? Just ask in <white>chat</white> if you need help!"
+  fade-in-ticks: 15
+  stay-ticks: 100
+  fade-out-ticks: 25
+  chat:
+    - ""
+    - "<gradient:#55ffff:#aa55ff><bold>Welcome, {player}!</bold></gradient>"
+    - "<gray>Follow the <light_purple>purple arrows</light_purple> to the mines, <gold>gold</gold> to the crates and <aqua>aqua</aqua> to the leaderboards."
+    - "<gray>A short <aqua>tutorial</aqua> will show you the basics in a moment."
+    - "<gray>Stuck? Ask in chat, someone will help you out."
+    - ""
+
+# When someone joins for the first time, everyone else can type /welcome to greet them and get a reward.
+welcome-reward:
+  enabled: true
+  window-seconds: 60
+  announce: "<aqua>{player}</aqua> <gray>joined for the first time! Type <yellow>/welcome</yellow> within {seconds}s for a free <light_purple>Rare Key</light_purple>."
+  broadcast: "<aqua>{player}</aqua> <dark_gray>»</dark_gray> <white>Welcome to the server, <aqua>{newcomer}</aqua>!"
+  rewarded: "<green>Thanks for welcoming {newcomer}! You got a <light_purple>Rare Key</light_purple>."
+  nobody: "<red>There's no new player to welcome right now."
+  self: "<red>You can't welcome yourself, but welcome anyway!"
+  # Run from the console for each player who types /welcome. {player} = them, {newcomer} = the new player.
+  commands:
+    - "crate givekey {player} rare 1"
+
+# Pickaxe tiers, bought with tokens from the enchant menu. Every tier mines at the same speed;
+# a better tier raises how far the enchants under 'affects' can be levelled (cap % of their max level).
+# Format: "MATERIAL | display name | token cost | cap % | requirement (optional: rank X / prestige N)".
+# The first tier is the starting pickaxe. Maxing the pickaxe (Netherite) needs Prestige 1+.
+pickaxe-tiers:
+  enabled: true
+  affects: [fortune, explosive, jackhammer, token-finder, key-finder, token-fortune, merchant]
+  tiers:
+    - "WOODEN_PICKAXE | <#c69c6d>Wooden | 0 | 15"
+    - "STONE_PICKAXE | <gray>Stone | 50000 | 30 | rank E"
+    - "IRON_PICKAXE | <white>Iron | 400000 | 45 | rank K"
+    - "GOLDEN_PICKAXE | <gold>Gold | 2000000 | 60 | rank P"
+    - "DIAMOND_PICKAXE | <aqua>Diamond | 8000000 | 80 | rank Z"
+    - "NETHERITE_PICKAXE | <dark_purple>Netherite | 25000000 | 100 | prestige 1"
+
+# Walk-in portals: stepping into the box (block coords, inclusive) runs 'command' as the player.
+portals:
+  mines-hall:
+    world: spawn
+    min: "-5,103,-50"
+    max: "5,117,-50"
+    push-back-to: "0,103,-46"
+    push-back-yaw: 0
+    command: "mine"
+
+# Private mines (/pmine): every player can have their own mine island in this world.
+# The block mix follows the owner's rank. Sizes are "width | token cost" (first = free starting size).
+private-mines:
+  enabled: true
+  # true = /mine, /mines and the Mines Hall portal take players to their own private mine
+  replace-public-mines: true
+  world: pmines
+  spacing: 200
+  depth: 20
+  reset-seconds: 300
+  reset-percent: 0.75
+  max-members: 5
+  sizes:
+    - "21 | 0"
+    - "27 | 50000"
+    - "33 | 200000"
+    - "41 | 750000"
+    - "51 | 2500000"
+
+# Cores: the premium currency. /cores, /cores pay, /cores shop. Admin: /pa give|take|set cores <player> <amount>
+cores:
+  symbol: "<#3ab8ff>◉"
+  # Icon for Cores in menus (custom head texture id)
+  head: "b3ffe26b57f6afd20a07198ebff24a272abe6518c676af54b9321b09d13d6e63"
+  # Core Shop entries: name, icon, amount, price (Cores), lore, commands run from console (%player%)
+  shop:
+    capsules:
+      name: "<gradient:#7afcff:#b36bff><b>3x Pet Capsule</b></gradient>"
+      icon: HEART_OF_THE_SEA
+      head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4"
+      amount: 3
+      price: 150
+      lore: ["<gray>Hatch random sci-fi pets."]
+      commands: ["pa givepet %player% 3"]
+    season-keys:
+      name: "<gradient:#ff7af5:#7afcff><b>3x Season Key</b></gradient>"
+      icon: AMETHYST_SHARD
+      amount: 3
+      price: 300
+      lore: ["<gray>Season 1: Nebula Vanguard armor,", "<gray>pets, legendary keys and Cores."]
+      commands: ["crate givekey %player% season 3"]
+    legendary-keys:
+      # Not sold: the Season Key is the premium key
+      enabled: false
+      name: "<gold><b>3x Legendary Key"
+      icon: TRIPWIRE_HOOK
+      amount: 3
+      price: 250
+      lore: ["<gray>Quantum Aegis armor, pets and more."]
+      commands: ["crate givekey %player% legendary 3"]
+    rare-keys:
+      name: "<aqua><b>10x Rare Key"
+      icon: TRIPWIRE_HOOK
+      amount: 10
+      price: 200
+      lore: ["<gray>Plasma Weave armor, pet capsules."]
+      commands: ["crate givekey %player% rare 10"]
+    token-pack:
+      name: "<yellow><b>1,000,000 Tokens"
+      icon: SUNFLOWER
+      price: 100
+      lore: ["<gray>A big token boost."]
+      commands: ["pa give tokens %player% 1000000"]
+
+# Mining armor sets ("minesets"). Every piece rolls a quality 0-100; stats scale with it.
+# quality = 100 * random^quality-curve  -> most pieces are low, 90+ is rare, 100 is very rare.
+# stats (per piece at quality 100): fortune / token-gain / key-finder / proc-chance / token-finder are fractions (0.40 = +40%),
+# sell is added to the sell multiplier (0.15 = +0.15x). set-bonus: wearing all 4 pieces, scaled by their average quality.
+gear:
+  quality-curve: 2.2
+  # /wardrobe: store one full set of each type. A complete stored set gives
+  # token-bonus x (average quality / 100) ^ quality-power  (0.75 = +75% tokens at 100% quality)
+  wardrobe:
+    title: "<dark_gray>Armor Wardrobe"
+    quality-power: 1.5
+    token-bonus: {scrap: 0.05, plasma: 0.15, quantum: 0.40, nebula: 0.75}
+  broadcast-quality: 90
+  sets:
+    scrap:
+      name: "<gray>Scrap Exo"
+      flavor: "Salvaged hull plating, still humming."
+      material: CHAINMAIL
+      trim: {pattern: sentry, material: iron}
+      armor-per-piece: 3
+      stats: {fortune: 0.20, token-gain: 0.12, sell: 0.08}
+      set-bonus: {fortune: 0.30, token-gain: 0.20}
+    plasma:
+      name: "<light_purple>Plasma Weave"
+      flavor: "Woven from contained plasma filaments."
+      material: LEATHER
+      color: "#c13dff"
+      trim: {pattern: flow, material: amethyst}
+      armor-per-piece: 5
+      stats: {fortune: 0.50, token-gain: 0.30, sell: 0.15, key-finder: 0.05}
+      set-bonus: {fortune: 0.60, token-gain: 0.50, sell: 0.25}
+    quantum:
+      name: "<gradient:#7afcff:#3ab8ff>Quantum Aegis"
+      flavor: "Phase-shifted alloy from a collapsed star."
+      material: NETHERITE
+      trim: {pattern: silence, material: diamond}
+      armor-per-piece: 8
+      stats: {fortune: 1.20, token-gain: 0.70, sell: 0.40, key-finder: 0.15, proc-chance: 0.08}
+      set-bonus: {fortune: 1.50, token-gain: 1.20, sell: 0.60, proc-chance: 0.15}
+    # Season 1 exclusive (Season Crate)
+    nebula:
+      name: "<gradient:#ff7af5:#7afcff>Nebula Vanguard"
+      flavor: "Season 1 - forged in the heart of a nebula."
+      material: NETHERITE
+      trim: {pattern: spire, material: amethyst}
+      armor-per-piece: 9
+      stats: {fortune: 1.80, token-gain: 1.00, sell: 0.60, key-finder: 0.20, proc-chance: 0.12}
+      set-bonus: {fortune: 2.20, token-gain: 1.80, sell: 0.90, proc-chance: 0.25}
+
+# Gacha pets. Pet Capsules hatch a random type + rarity. Pets level 1-100 from mining.
+# stat at a level = type per-level * level * rarity power.  XP to next level = xp-base * level^1.5 * rarity xp-mult
+pets:
+  xp-per-block: 1
+  proc-xp-share: 0.05
+  xp-base: 4
+  max-level: 100
+  max-owned: 45
+  # extra pet storage areas players can buy (one per cost, max = number of costs). currency: tokens | money | cores
+  storage-upgrades:
+    size: 45
+    currency: tokens
+    costs: [100000000, 1000000000]
+  show-follower: true
+  broadcast-from-rarity-index: 4
+  capsule:
+    material: HEART_OF_THE_SEA
+    # custom head texture (minecraft-heads.com "Value" or texture id); empty = use material
+    head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4"
+    name: "<gradient:#7afcff:#b36bff><b>Pet Capsule</b></gradient>"
+    lore: ["<gray>A cryo-sealed companion.", "<gray>Right-click to hatch!", "", "<dark_gray>/pets to see your pets"]
+  rarities:
+    common:     {name: "<gray>Common",           chance: 50,   power: 1,   xp-mult: 1}
+    uncommon:   {name: "<green>Uncommon",        chance: 28,   power: 2,   xp-mult: 1.6}
+    rare:       {name: "<aqua>Rare",             chance: 13,   power: 4,   xp-mult: 2.5}
+    epic:       {name: "<dark_purple>Epic",      chance: 6,    power: 8,   xp-mult: 4}
+    legendary:  {name: "<gold>Legendary",        chance: 2.5,  power: 16,  xp-mult: 6.5}
+    mythic:     {name: "<red><b>Mythic</b>",     chance: 0.45, power: 35,  xp-mult: 10}
+    celestial:  {name: "<gradient:#7afcff:#ff7af5><b>Celestial</b></gradient>", chance: 0.05, power: 100, xp-mult: 16}
+  # head: custom head texture shown in menus and as the floating pet (falls back to icon)
+  types:
+    nano-drone:   {name: "Nano Drone",   icon: OBSERVER, head: "bf154f6bbc34e3b3093869f39bdc19575bad53afddff8af2f51523437d92a45",          stat: fortune,      per-level: 0.0004, flavor: "A swarm of mining nanites."}
+    quantum-fox:  {name: "Quantum Fox",  icon: AMETHYST_CLUSTER, head: "211cfb2a87f0af0540be6a4e27d7d2785e3eb1cfd2ca59dd8106f02a7c673956",  stat: token-gain,   per-level: 0.0004, flavor: "Exists in two places. Finds twice the tokens."}
+    plasma-wisp:  {name: "Plasma Wisp",  icon: BLAZE_POWDER, head: "6ec1a6957f02a4258e64dc7c520463d92647888499845d784ef0e7abe8f38402",      stat: sell,         per-level: 0.0002, flavor: "Superheats ore for a better price."}
+    void-cat:     {name: "Void Cat",     icon: ENDER_EYE, head: "9f7ddb948eea73c3812bb37f7f6f68e33ba8b20f269b08e7063969b94a535461",         stat: key-finder,   per-level: 0.001,  flavor: "Always finds what was lost."}
+    cyber-golem:  {name: "Cyber Golem",  icon: HEAVY_CORE, head: "5283e6dc2345899823c2a870caee0b3702424a7f086bf9b442d7ae3e943413e0",        stat: proc-chance,  per-level: 0.0003, flavor: "Hits the rock so you don't have to."}
+    star-whale:   {name: "Star Whale",   icon: NAUTILUS_SHELL, head: "1a68f59a187f5b7183df2ea708a6e4704845afd433272cd32cbed52286db1fd3",    stat: token-finder, per-level: 0.0005, flavor: "Sings to buried tokens."}
+
+# Paid ranks, lowest to highest. A player shows the highest one they have (permission prisoncore.donor.<id>)
+# as {donor} in chat. Their sell bonus is permission-multipliers above (prisoncore.multiplier.<id>).
+# /store sells them for Cores (upgrades cost the difference). Perks are totals for that rank:
+# price (Cores), icon, fly (display only - give prisoncore.fly in LuckPerms), pet-slots (+active pets),
+# pet-storage (+pets you can own), autosell-minus (minutes faster), bag-space (0.30 = +30% Ore Bag), pmine-members (+invites), stats {token-gain...}
+donor-ranks:
+  spark:       {prefix: "<#ffd36e><b>SPARK</b> ", price: 500, pet-storage: 9, icon: GLOWSTONE_DUST, bag-space: 0.10}
+  ion:         {prefix: "<#6ee7ff><b>ION</b> ", price: 1200, pet-storage: 18, icon: PRISMARINE_CRYSTALS, bag-space: 0.20, autosell-minus: 1, pet-slots: 1, stats: {token-gain: 0.05}}
+  nova:        {prefix: "<#ff9f43><b>NOVA</b> ", price: 2500, pet-storage: 27, icon: BLAZE_POWDER, fly: true, bag-space: 0.30, autosell-minus: 2, pmine-members: 1, pet-slots: 1, stats: {token-gain: 0.10}}
+  pulsar:      {prefix: "<#a66bff><b>PULSAR</b> ", price: 5000, pet-storage: 36, icon: AMETHYST_SHARD, fly: true, bag-space: 0.45, autosell-minus: 3, pmine-members: 2, pet-slots: 2, stats: {token-gain: 0.15}}
+  quasar:      {prefix: "<#ff4fd8><b>QUASAR</b> ", price: 9000, pet-storage: 45, icon: ECHO_SHARD, fly: true, bag-space: 0.60, autosell-minus: 4, pmine-members: 3, pet-slots: 2, stats: {token-gain: 0.20}}
+  nebula:      {prefix: "<gradient:#4f7bff:#b36bff><b>NEBULA</b></gradient> ", price: 15000, pet-storage: 63, icon: END_CRYSTAL, fly: true, bag-space: 0.80, autosell-minus: 5, pmine-members: 4, pet-slots: 3, stats: {token-gain: 0.30}}
+  singularity: {prefix: "<gradient:#ffffff:#7afcff:#ff7af5><b>SINGULARITY</b></gradient> ", price: 25000, pet-storage: 90, icon: NETHER_STAR, fly: true, bag-space: 1.00, autosell-minus: 6, pmine-members: 5, pet-slots: 4, stats: {token-gain: 0.40}}
+
+# /gems: gem slots unlock with prestige; gems give a stat when socketed; 2 identical gems fuse into +1 level.
+gems:
+  enabled: true
+  title: "<dark_gray>Gems"
+  max-level: 14
+  # stat value = max x (level / max-level) ^ curve   (+1 is small, +14 = max)
+  curve: 1.6
+  # prestige needed for each slot
+  slots: [10, 13, 16, 20, 25]
+  # % chance to fuse +1->+2, +2->+3 ... +13->+14. A failed fusion destroys one of the two gems.
+  fuse-chances: [100, 95, 90, 85, 78, 70, 62, 54, 46, 38, 30, 22, 15]
+  broadcast-from: 10
+  glint-from: 5
+  drop:
+    min-prestige: 10
+    chance-per-block: 0.005   # % per mined block (not Jackhammer/Explosive layers) -> 1 in 20,000
+    plus2-chance: 10          # % of drops that are +2
+    plus3-chance: 2           # % of drops that are +3
+  # stat: sell (money multiplier, +x), fortune (drops), token-gain, key-finder, proc-chance (Jackhammer/Explosive)
+  types:
+    abundance: {name: "<gradient:#7dff8a:#2ecc71><b>Abundance Gem</b></gradient>", icon: EMERALD, stat: sell, max: 2.0, description: "Raises your money multiplier."}
+    prospect:  {name: "<gradient:#7afcff:#3a8bff><b>Prospect Gem</b></gradient>", icon: DIAMOND, stat: fortune, max: 1.0, description: "More drops from every block."}
+    flux:      {name: "<gradient:#ffe066:#ffb347><b>Flux Gem</b></gradient>", icon: GOLD_NUGGET, stat: token-gain, max: 1.0, description: "More tokens from mining."}
+    fate:      {name: "<gradient:#ff7af5:#b36bff><b>Fate Gem</b></gradient>", icon: AMETHYST_SHARD, stat: key-finder, max: 0.5, description: "Find crate keys more often."}
+    surge:     {name: "<gradient:#ff6b6b:#ff3b3b><b>Surge Gem</b></gradient>", icon: REDSTONE, stat: proc-chance, max: 0.5, description: "Jackhammer & Explosive trigger more."}
+
+# /cosmetics: chat color, name color, title (prefix), suffix and /nick.
+# require: none | clearance:<level 1-6> | donor:<rank id> | prestige:<n> | perm:<permission>; a list = any of them.
+# prisoncore.cosmetics.all unlocks everything.
+cosmetics:
+  # used for both chat color and name color. tag = MiniMessage opening tag.
+  colors:
+    green:       {name: "<green>Green", tag: "<green>", icon: LIME_DYE, require: "clearance:1"}
+    aqua:        {name: "<aqua>Aqua", tag: "<aqua>", icon: CYAN_DYE, require: "clearance:2"}
+    blue:        {name: "<#5c9dff>Blue", tag: "<#5c9dff>", icon: BLUE_DYE, require: "clearance:3"}
+    pink:        {name: "<light_purple>Pink", tag: "<light_purple>", icon: PINK_DYE, require: "clearance:4"}
+    gold:        {name: "<gold>Gold", tag: "<gold>", icon: ORANGE_DYE, require: "clearance:5"}
+    governor:    {name: "<gradient:#7afcff:#b36bff>Governor</gradient>", tag: "<gradient:#7afcff:#b36bff>", icon: PRISMARINE_CRYSTALS, require: "clearance:6"}
+    spark:       {name: "<#ffd36e>Spark Yellow", tag: "<#ffd36e>", icon: YELLOW_DYE, require: "donor:spark"}
+    ion:         {name: "<#6ee7ff>Ion Blue", tag: "<#6ee7ff>", icon: LIGHT_BLUE_DYE, require: "donor:ion"}
+    nova:        {name: "<#ff9f43>Nova Orange", tag: "<#ff9f43>", icon: BLAZE_POWDER, require: "donor:nova"}
+    pulsar:      {name: "<#a66bff>Pulsar Violet", tag: "<#a66bff>", icon: PURPLE_DYE, require: "donor:pulsar"}
+    quasar:      {name: "<#ff4fd8>Quasar Magenta", tag: "<#ff4fd8>", icon: MAGENTA_DYE, require: "donor:quasar"}
+    nebula:      {name: "<gradient:#4f7bff:#b36bff>Nebula</gradient>", tag: "<gradient:#4f7bff:#b36bff>", icon: END_CRYSTAL, require: "donor:nebula"}
+    singularity: {name: "<gradient:#ffffff:#7afcff:#ff7af5>Singularity</gradient>", tag: "<gradient:#ffffff:#7afcff:#ff7af5>", icon: NETHER_STAR, require: "donor:singularity"}
+    rainbow:     {name: "<rainbow>Rainbow</rainbow>", tag: "<rainbow>", icon: PRISMARINE_SHARD, require: "donor:singularity"}
+    crimson:     {name: "<#ff5c5c>Crimson", tag: "<#ff5c5c>", icon: RED_DYE, require: "prestige:3"}
+    molten:      {name: "<gradient:#ffd166:#ef476f>Molten</gradient>", tag: "<gradient:#ffd166:#ef476f>", icon: MAGMA_CREAM, require: "prestige:10"}
+    void:        {name: "<gradient:#8a2be2:#00e5ff>Void</gradient>", tag: "<gradient:#8a2be2:#00e5ff>", icon: ENDER_EYE, require: "prestige:20"}
+  # extra titles for /prefix (donor rank + clearance tag are always options)
+  titles:
+    # staff titles: only players with the permission (lp user <name> permission set prisoncore.title.owner true)
+    owner:      {name: "<gradient:#ff3b3b:#ffb347><b>Owner</b></gradient>", text: "<dark_gray>[</dark_gray><gradient:#ff3b3b:#ffb347><b>OWNER</b></gradient><dark_gray>]</dark_gray> ", icon: NETHERITE_HELMET, require: "perm:prisoncore.title.owner"}
+    admin:      {name: "<#ff5c5c><b>Admin</b>", text: "<dark_gray>[</dark_gray><#ff5c5c><b>ADMIN</b></#ff5c5c><dark_gray>]</dark_gray> ", icon: DIAMOND_HELMET, require: "perm:prisoncore.title.admin"}
+    mod:        {name: "<#5ce1ff><b>Mod</b>", text: "<dark_gray>[</dark_gray><#5ce1ff><b>MOD</b></#5ce1ff><dark_gray>]</dark_gray> ", icon: IRON_HELMET, require: "perm:prisoncore.title.mod"}
+    helper:     {name: "<#7dff8a><b>Helper</b>", text: "<dark_gray>[</dark_gray><#7dff8a><b>HELPER</b></#7dff8a><dark_gray>]</dark_gray> ", icon: GOLDEN_HELMET, require: "perm:prisoncore.title.helper"}
+    builder:    {name: "<#ffd36e><b>Builder</b>", text: "<dark_gray>[</dark_gray><#ffd36e><b>BUILDER</b></#ffd36e><dark_gray>]</dark_gray> ", icon: BRICKS, require: "perm:prisoncore.title.builder"}
+    inmate:     {name: "<gray>Inmate", text: "<dark_gray>[<gray>Inmate</gray>]</dark_gray> ", icon: IRON_BARS, require: "none"}
+    miner:      {name: "<#c8a26b>Miner", text: "<dark_gray>[<#c8a26b>Miner</#c8a26b>]</dark_gray> ", icon: IRON_PICKAXE, require: "prestige:1"}
+    smuggler:   {name: "<dark_red>Smuggler", text: "<dark_gray>[<dark_red>Smuggler</dark_red>]</dark_gray> ", icon: ENDER_EYE, require: "clearance:2"}
+    veteran:    {name: "<aqua>Veteran", text: "<dark_gray>[<aqua>Veteran</aqua>]</dark_gray> ", icon: SHIELD, require: "prestige:5"}
+    foreman:    {name: "<light_purple>Foreman", text: "<dark_gray>[<light_purple>Foreman</light_purple>]</dark_gray> ", icon: GOLDEN_PICKAXE, require: "clearance:4"}
+    tycoon:     {name: "<gold>Tycoon", text: "<dark_gray>[<gold>Tycoon</gold>]</dark_gray> ", icon: GOLD_BLOCK, require: "prestige:10"}
+    stargazer:  {name: "<#a66bff>Stargazer", text: "<dark_gray>[<#a66bff>Stargazer</#a66bff>]</dark_gray> ", icon: SPYGLASS, require: "donor:pulsar"}
+    warden:     {name: "<gradient:#7afcff:#b36bff>Warden</gradient>", text: "<dark_gray>[<gradient:#7afcff:#b36bff>Warden</gradient>]</dark_gray> ", icon: BEACON, require: "clearance:6"}
+    voidwalker: {name: "<gradient:#4f7bff:#b36bff>Void Walker</gradient>", text: "<dark_gray>[<gradient:#4f7bff:#b36bff>Void Walker</gradient>]</dark_gray> ", icon: END_CRYSTAL, require: "donor:nebula"}
+    legend:     {name: "<gradient:#ffd166:#ef476f>Legend</gradient>", text: "<dark_gray>[<gradient:#ffd166:#ef476f>Legend</gradient>]</dark_gray> ", icon: DRAGON_HEAD, require: "prestige:20"}
+    horizon:    {name: "<gradient:#ffffff:#7afcff:#ff7af5>Event Horizon</gradient>", text: "<dark_gray>[<gradient:#ffffff:#7afcff:#ff7af5>Event Horizon</gradient>]</dark_gray> ", icon: NETHER_STAR, require: "donor:singularity"}
+  suffixes:
+    star:     {name: "<aqua>Star", text: " <aqua>✦", icon: CYAN_DYE, require: "clearance:1"}
+    bolt:     {name: "<yellow>Bolt", text: " <yellow>⚡", icon: GLOWSTONE_DUST, require: "clearance:2"}
+    comet:    {name: "<#ff9f43>Comet", text: " <#ff9f43>☄", icon: FIRE_CHARGE, require: "clearance:3"}
+    pick:     {name: "<#c8a26b>Pickaxe", text: " <#c8a26b>⛏", icon: IRON_PICKAXE, require: "prestige:1"}
+    sigil:    {name: "<light_purple>Sigil", text: " <light_purple>✠", icon: AMETHYST_SHARD, require: "clearance:4"}
+    crown:    {name: "<gold>Crown", text: " <gold>♛", icon: GOLDEN_HELMET, require: "clearance:5"}
+    eye:      {name: "<gradient:#7afcff:#b36bff>Eye</gradient>", text: " <gradient:#7afcff:#b36bff>◉</gradient>", icon: ENDER_EYE, require: "clearance:6"}
+    flare:    {name: "<#ff5c5c>Flare", text: " <#ff5c5c>♨", icon: BLAZE_POWDER, require: "prestige:5"}
+    heart:    {name: "<#ff6b9a>Heart", text: " <#ff6b9a>❤", icon: PINK_DYE, require: "donor:spark"}
+    sun:      {name: "<#6ee7ff>Sun", text: " <#6ee7ff>☀", icon: SUNFLOWER, require: "donor:ion"}
+    sparkle:  {name: "<#ff9f43>Sparkle", text: " <#ff9f43>✧", icon: BLAZE_POWDER, require: "donor:nova"}
+    atom:     {name: "<#a66bff>Atom", text: " <#a66bff>⚛", icon: PURPLE_DYE, require: "donor:pulsar"}
+    bloom:    {name: "<#ff4fd8>Bloom", text: " <#ff4fd8>❀", icon: PINK_TULIP, require: "donor:quasar"}
+    galaxy:   {name: "<gradient:#4f7bff:#b36bff>Galaxy</gradient>", text: " <gradient:#4f7bff:#b36bff>✺</gradient>", icon: END_CRYSTAL, require: "donor:nebula"}
+    infinity: {name: "<gradient:#ffffff:#7afcff:#ff7af5>Infinity</gradient>", text: " <gradient:#ffffff:#7afcff:#ff7af5>∞</gradient>", icon: NETHER_STAR, require: "donor:singularity"}
+  nick:
+    require: ["clearance:4", "donor:nova"]
+    blocked-words: [admin, owner, staff, mod, helper, console, server, drkmode]
+
+# /store (ranks + items for Cores). rank-command gives the rank; %rank% = the donor-ranks id (= LuckPerms group).
+store:
+  title: "<dark_gray>Colony Store"
+  rank-command: "lp user %player% parent add %rank%"
+  buy-cores-hint: "Get Cores at our webstore."
+
+# Money / tokens per minute (from mining and selling). Every interval each player gets a chat line
+# with what they earned; /earnings shows the 1 and 5 minute rates, /earnings toggle turns the line off.
+earnings:
+  enabled: true
+  interval-seconds: 60
+
+# Colony Clearance (/citizen): city ranks bought with Prestige Points, one after another.
+# Every value is the TOTAL at that level (not added on top of the previous one).
+# fly: none | pmine (only in private mines) | all
+citizenship:
+  menu-title: "<dark_gray>Colony Clearance"
+  levels:
+    resident:
+      name: "<green>Resident"
+      tag: "<green>⬡ "
+      icon: LIME_DYE
+      cost: 100
+      min-prestige: 1
+      pet-slots: 2
+      pet-storage: 9
+    technician:
+      name: "<aqua>Technician"
+      tag: "<aqua>⬡ "
+      icon: CYAN_DYE
+      cost: 150
+      min-prestige: 2
+      pet-slots: 2
+      pet-storage: 9
+      stats:
+        token-gain: 0.10
+        sell: 0.25
+    engineer:
+      name: "<blue>Engineer"
+      tag: "<blue>⬡ "
+      icon: LIGHT_BLUE_DYE
+      cost: 250
+      min-prestige: 3
+      pet-slots: 3
+      pet-storage: 9
+      pmine-members: 2
+      stats:
+        fortune: 0.15
+        token-gain: 0.10
+        sell: 0.25
+    officer:
+      name: "<light_purple>Officer"
+      tag: "<light_purple>⬡ "
+      icon: MAGENTA_DYE
+      cost: 400
+      min-prestige: 4
+      pet-slots: 3
+      pet-storage: 9
+      pmine-members: 2
+      fly: pmine
+      stats:
+        fortune: 0.15
+        token-gain: 0.20
+        sell: 0.50
+    councilor:
+      name: "<gold>Councilor"
+      tag: "<gold>⬡ "
+      icon: ORANGE_DYE
+      cost: 600
+      min-prestige: 5
+      pet-slots: 4
+      pet-storage: 18
+      pmine-members: 4
+      fly: pmine
+      stats:
+        fortune: 0.30
+        token-gain: 0.20
+        sell: 0.50
+    governor:
+      name: "<gradient:#7afcff:#b36bff><b>Governor</b></gradient>"
+      tag: "<gradient:#7afcff:#b36bff>⬡</gradient> "
+      icon: AMETHYST_SHARD
+      cost: 1000
+      min-prestige: 7
+      pet-slots: 5
+      pet-storage: 27
+      pmine-members: 6
+      fly: all
+      stats:
+        fortune: 0.45
+        token-gain: 0.35
+        sell: 1.00
+      extra-lore:
+        - "<gray>A seat on the colony council."
+
+# Cells: small player-owned cells in their own void world, where players build and run chest shops.
+# Admin setup: mv create cells normal -g VoidGen, then /cell build (creates the block and /warp cells).
+cells:
+  enabled: true
+  world: cells
+  base-y: 100
+  floors: 2
+  cells-per-side: 16
+  # one-time price, the cell is yours until you're offline for inactive-days
+  price: 1000000000000
+  inactive-days: 30
+
+# Colony Navigator: hotbar item (right-click or /menu) with every warp + a Help page.
+# Any Essentials warp that isn't listed here is added automatically, so new warps show up by themselves.
+navigator:
+  enabled: true
+  title: "<dark_gray>Colony Navigator"
+  help-title: "<dark_gray>Help & Features"
+  item:
+    slot: 8
+    head: "fdcccca8e9a518285e0352b43182f5845b1a66b9f09b450222c6e21005b6ca1a"
+    material: COMPASS
+    name: "<gradient:#7afcff:#b36bff><b>Colony Navigator</b></gradient> <gray>(Right-click)"
+    lore: ["<gray>Warps, help and every menu.", "<dark_gray>/menu"]
+  warps:
+    spawn:        {name: "<white><b>Spawn", icon: BEACON, command: "spawn", lore: ["<gray>The colony city centre."]}
+    mines:        {name: "<aqua><b>Mines Hall", icon: DIAMOND_PICKAXE, command: "warp mines", lore: ["<gray>Portals to the mines."]}
+    pmine:        {name: "<green><b>My Private Mine", icon: DIAMOND_ORE, command: "pmine", lore: ["<gray>Your own mine - it changes", "<gray>with your rank."]}
+    crates:       {name: "<gold><b>Crates", head: "6d75b501e4ce5a5e7bcced4386df0e05ed254f99808d2b933121a5ef993d3e37", command: "warp crates", lore: ["<gray>Common, Rare, Legendary,", "<gray>Vote and Season crates."]}
+    leaderboards: {name: "<light_purple><b>Leaderboards", icon: GOLDEN_HELMET, command: "warp leaderboards", lore: ["<gray>Top money, prestige and blocks."]}
+    cells:        {name: "<gold><b>Cell Block", icon: IRON_BARS, command: "warp cells", lore: ["<gray>Player cells and shops."]}
+  # Help page: hover = explanation, click = runs the command
+  help:
+    rankup:     {name: "<green><b>Ranks & Prestige", icon: EXPERIENCE_BOTTLE, command: "ranks", lore: ["<gray>Mine, sell and <white>/rankup</white> from A to Z.", "<gray>At Z, <white>/prestige</white>: costs go up but you earn", "<gray>more, drop more ores and get Prestige Points.", "<gray><white>/rankupmax</white> ranks up as far as you can."]}
+    cosmetics:  {name: "<gradient:#7afcff:#ff7af5><b>Cosmetics</b></gradient>", icon: NAME_TAG, command: "cosmetics", lore: ["<gray>Chat color, name color, title,", "<gray>suffix and <white>/nick</white>. Unlocked by", "<gray>Colony Clearance, ranks and prestige."]}
+    gems:       {name: "<gradient:#ff7af5:#7afcff><b>Gems</b></gradient>", icon: AMETHYST_CLUSTER, command: "gems", lore: ["<gray>Gem slots unlock at Prestige 10+.", "<gray>Socket gems for money, drops, tokens,", "<gray>keys or procs. Fuse 2 into +1 (max +14)."]}
+    stats:      {name: "<gradient:#7afcff:#ff7af5><b>My Stats</b></gradient>", icon: SPYGLASS, command: "stats", lore: ["<gray>Every multiplier and chance you have,", "<gray>and exactly where each one comes from.", "<gray><white>/stats</white> or <white>/stats <player></white>."]}
+    enchants:   {name: "<aqua><b>Pickaxe Enchants", icon: ENCHANTED_BOOK, command: "enchants", lore: ["<gray>Spend tokens on Fortune, Jackhammer,", "<gray>Token Finder, Key Finder, Merchant...", "<gray>Hold your pickaxe and type <white>/enchants</white>.", "<gray>Press <white>Q</white> on an enchant to turn it off/on."]}
+    tier:       {name: "<gold><b>Pickaxe Upgrade", icon: NETHERITE_PICKAXE, command: "enchants", lore: ["<gray>In the enchant menu (bottom middle):", "<gray>upgrade Wooden -> Netherite to raise", "<gray>every enchant's max level."]}
+    bag:        {name: "<#c8a26b><b>Ore Bag", icon: BUNDLE, command: "bag", lore: ["<gray>Everything you mine goes in here.", "<gray>Upgrade its <white>space</white> (money) and", "<gray><white>multiplier</white> (tokens, only on autosell).", "<gray>Full = ores lost!"]}
+    autosell:   {name: "<yellow><b>Autosell", icon: HOPPER, command: "autosell", lore: ["<gray>Sells your bag + inventory on a timer:", "<gray>15 min, faster with prestige and ranks.", "<gray><white>/sell</white> sells by hand any time."]}
+    pmine:      {name: "<green><b>Private Mine", icon: DIAMOND_ORE, command: "pmine menu", lore: ["<gray>Your own mine that follows your rank.", "<gray>Upgrade size and invite friends.", "<gray><white>/pmine</white> to go there."]}
+    crates:     {name: "<gold><b>Crates & Filter", head: "b2bb2483449fb689ab60e776cf9efe22e181cbd7c1bdbd8bb6d91c4d7e2a146b", command: "cratefilter", lore: ["<gray>Keys come from mining (Key Finder),", "<gray>voting and the store. Left-click a crate", "<gray>to see rewards and auto-delete junk."]}
+    pets:       {name: "<light_purple><b>Pets", head: "211cfb2a87f0af0540be6a4e27d7d2785e3eb1cfd2ca59dd8106f02a7c673956", command: "pets", lore: ["<gray>Hatch Pet Capsules for random pets.", "<gray>They level up as you mine and boost", "<gray>fortune, tokens, sell and more."]}
+    wardrobe:   {name: "<aqua><b>Armor Wardrobe", icon: ARMOR_STAND, command: "wardrobe", lore: ["<gray>Wear mining armor for stats, and", "<gray>store a full set of each type for a", "<gray>permanent <yellow>token multiplier</yellow>."]}
+    citizen:    {name: "<gradient:#7afcff:#b36bff><b>Colony Clearance", icon: NETHER_STAR, command: "citizen", lore: ["<gray>City ranks bought with Prestige Points:", "<gray>more pets, stats, invites and /fly."]}
+    ppoints:    {name: "<light_purple><b>Prestige Points", icon: AMETHYST_SHARD, command: "ppoints", lore: ["<gray>Earned every prestige (more each time).", "<gray>Spent on Colony Clearance."]}
+    store:      {name: "<#7fd8ff><b>Store & Cores", head: "b3ffe26b57f6afd20a07198ebff24a272abe6518c676af54b9321b09d13d6e63", command: "store", lore: ["<gray>Cores are the premium currency:", "<gray>ranks, Season Keys and more."]}
+    earnings:   {name: "<green><b>Earnings", icon: CLOCK, command: "earnings", lore: ["<gray>Your money and tokens per minute.", "<gray><white>/earnings toggle</white> hides the chat line."]}
+    fly:        {name: "<white><b>Fly", icon: FEATHER, command: "fly", lore: ["<gray>Paid ranks from Nova and Officer+", "<gray>clearance can fly. It turns on", "<gray>automatically when you join."]}
+    cells:      {name: "<gold><b>Cells & Shops", icon: IRON_BARS, command: "cells", lore: ["<gray>Buy a cell for <green>$1T</green> - yours forever.", "<gray>Build in it and sell items from", "<gray>chest shops. <white>/cell shops</white> lists them all."]}
+    auction:    {name: "<yellow><b>Auction House", icon: GOLD_INGOT, command: "ah", lore: ["<gray>Buy and sell items with other players."]}
+    contraband: {name: "<dark_red><b>Contraband", icon: ENDER_EYE, command: "contraband", lore: ["<gray>Buy chests, building blocks,", "<gray>lights, decor and food with money.", "<gray><white>/contraband</white> or <white>/shop</white>. Can't be sold back."]}
+    tutorial:   {name: "<gradient:#55ffff:#aa55ff><b>Tutorial", icon: WRITABLE_BOOK, command: "tutorial", lore: ["<gray>Replay the new player tutorial.", "<gray>Finishing it the first time", "<gray>gives you crate keys."]}
+    warps:      {name: "<aqua><b>Warps", icon: ENDER_PEARL, command: "menu", lore: ["<gray>Every place on the server.", "<gray>Also <white>/warp <name></white>."]}
+
+# /contraband (/shop): basic supplies for money. Items are tagged contraband: they can't be sold or bagged.
+# items: MATERIAL: {price: money, amount: per purchase}  (shift-click buys 8x)
+contraband:
+  title: "<dark_gray>Contraband"
+  categories:
+    storage:
+      name: "<gold><b>Storage"
+      icon: CHEST
+      items:
+        CHEST: {price: 25000, amount: 1}
+        BARREL: {price: 25000, amount: 1}
+        HOPPER: {price: 100000, amount: 1}
+    building:
+      name: "<aqua><b>Building Blocks"
+      icon: DEEPSLATE_TILES
+      items:
+        DEEPSLATE_TILES: {price: 20000, amount: 64}
+        POLISHED_DEEPSLATE: {price: 20000, amount: 64}
+        POLISHED_BLACKSTONE_BRICKS: {price: 20000, amount: 64}
+        SMOOTH_QUARTZ: {price: 30000, amount: 64}
+        QUARTZ_BRICKS: {price: 30000, amount: 64}
+        WHITE_CONCRETE: {price: 15000, amount: 64}
+        BLACK_CONCRETE: {price: 15000, amount: 64}
+        GRAY_CONCRETE: {price: 15000, amount: 64}
+        CYAN_CONCRETE: {price: 15000, amount: 64}
+        LIGHT_BLUE_CONCRETE: {price: 15000, amount: 64}
+        PURPLE_CONCRETE: {price: 15000, amount: 64}
+        IRON_BARS: {price: 20000, amount: 64}
+        GLASS: {price: 15000, amount: 64}
+        TINTED_GLASS: {price: 30000, amount: 64}
+        CYAN_STAINED_GLASS: {price: 15000, amount: 64}
+        PURPLE_STAINED_GLASS: {price: 15000, amount: 64}
+        BLACK_STAINED_GLASS: {price: 15000, amount: 64}
+    shapes:
+      name: "<light_purple><b>Stairs & Slabs"
+      icon: DEEPSLATE_TILE_STAIRS
+      items:
+        DEEPSLATE_TILE_STAIRS: {price: 20000, amount: 64}
+        DEEPSLATE_TILE_SLAB: {price: 20000, amount: 64}
+        POLISHED_BLACKSTONE_BRICK_STAIRS: {price: 20000, amount: 64}
+        POLISHED_BLACKSTONE_BRICK_SLAB: {price: 20000, amount: 64}
+        SMOOTH_QUARTZ_STAIRS: {price: 30000, amount: 64}
+        SMOOTH_QUARTZ_SLAB: {price: 30000, amount: 64}
+        POLISHED_DEEPSLATE_WALL: {price: 20000, amount: 64}
+    lighting:
+      name: "<yellow><b>Lighting"
+      icon: SEA_LANTERN
+      items:
+        SEA_LANTERN: {price: 50000, amount: 16}
+        PEARLESCENT_FROGLIGHT: {price: 50000, amount: 16}
+        VERDANT_FROGLIGHT: {price: 50000, amount: 16}
+        END_ROD: {price: 40000, amount: 16}
+        LANTERN: {price: 30000, amount: 16}
+        SOUL_LANTERN: {price: 30000, amount: 16}
+    decor:
+      name: "<green><b>Decor"
+      icon: ITEM_FRAME
+      items:
+        ITEM_FRAME: {price: 20000, amount: 8}
+        GLOW_ITEM_FRAME: {price: 40000, amount: 8}
+        ARMOR_STAND: {price: 50000, amount: 4}
+        OAK_SIGN: {price: 10000, amount: 8}
+        FLOWER_POT: {price: 10000, amount: 8}
+        BLACK_CARPET: {price: 10000, amount: 16}
+        CYAN_CARPET: {price: 10000, amount: 16}
+        CHAIN: {price: 20000, amount: 16}
+        LIGHTNING_ROD: {price: 20000, amount: 8}
+        BOOKSHELF: {price: 30000, amount: 8}
+    supplies:
+      name: "<red><b>Food & Tools"
+      icon: COOKED_BEEF
+      items:
+        COOKED_BEEF: {price: 10000, amount: 16}
+        GOLDEN_CARROT: {price: 25000, amount: 16}
+        CRAFTING_TABLE: {price: 5000, amount: 1}
+        TORCH: {price: 5000, amount: 32}
+
+# What players see in their multiplayer server list (MiniMessage, gradients work).
+# Each line fits about 45 characters. Icon: plugins/PrisonCore/server-icon.png (64x64 PNG).
+server-list:
+  enabled: true
+  line1: "<b><gradient:#00e5ff:#7a5cff:#ff4fd8>DRKMODE</gradient></b> <dark_gray>|</dark_gray> <white>Sci-fi Prisons</white>"
+  line2: "<aqua>Private mines</aqua> <dark_gray>•</dark_gray> <light_purple>Pets</light_purple> <dark_gray>•</dark_gray> <gold>Crates</gold> <dark_gray>•</dark_gray> <yellow>Cells</yellow>"
+  icon: true

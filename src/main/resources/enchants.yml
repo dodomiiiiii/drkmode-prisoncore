@@ -1,0 +1,159 @@
+# =========================================================
+#  Pickaxe & enchants. All upgrades cost TOKENS.
+#  cost for next level = cost.base + cost.increase * currentLevel
+#  chance (%) = chance.base + chance.per-level * level  (capped at chance.max)
+# =========================================================
+
+pickaxe:
+  # Starting pickaxe look. Tiers (Wooden -> Netherite) are in config.yml > pickaxe-tiers.
+  material: WOODEN_PICKAXE
+  # Every prison pickaxe mines at the same speed whatever its material (wood, stone, iron...).
+  # Only the Efficiency enchant changes it: see enchants > efficiency > speed-per-level.
+  name: "<gradient:#7afcff:#feff9c><b>Prison Pickaxe</b></gradient>"
+  lore-header:
+    - "<dark_gray>Owner: {owner}"
+    - ""
+  enchant-lore-format: "<gray>{name} <white>{level}"
+  # Levels a brand new pickaxe starts with
+  starting-levels:
+    efficiency: 0
+    fortune: 0
+
+menu:
+  title: "<dark_gray>Pickaxe Enchants"
+
+# drops = Fortune gives more items (fills the bag faster). value = Fortune multiplies the sell price instead.
+fortune-boosts: drops
+
+# Blocks broken by Explosive/Jackhammer are sold instantly (recommended - layers are huge).
+proc-blocks-autosell: true
+# Show "Jackhammer broke X blocks" in the action bar
+proc-actionbar: true
+
+enchants:
+  efficiency:
+    enabled: true
+    name: "<aqua>Efficiency"
+    icon: GOLDEN_PICKAXE
+    slot: 10
+    description: ["<gray>Mine blocks faster.", "<gray>Lvl 2: stone breaks instantly", "<gray>Lvl 3: ores | Lvl 4: deepslate ores & ore blocks", "<gray>Lvl 5: everything (obsidian, debris, netherite)"]
+    max-level: 5
+    # Mining speed at each level, starting at level 0 (a new pickaxe, about wooden pick + Efficiency II).
+    # A block breaks instantly when speed >= hardness x 30:
+    #   stone 45 | ores 90 | deepslate ores 135 | ore blocks 150 | obsidian, ancient debris, netherite 1500
+    speed-per-level: [7, 20, 46, 95, 155, 1500]
+    cost: {base: 100, increase: 150}
+
+  fortune:
+    enabled: true
+    name: "<green>Fortune"
+    icon: DIAMOND
+    slot: 11
+    description: ["<gray>More drops from every block.", "<gray>Max: <green>+600%</green> drops (x7)"]
+    max-level: 1000
+    # level 1000 = 1 + 1000 * 0.006 = x7 drops (+600%)
+    extra-drops-per-level: 0.006
+    cost: {base: 50, increase: 78}
+
+  speed:
+    enabled: true
+    name: "<white>Speed"
+    icon: SUGAR
+    slot: 12
+    description: ["<gray>Speed effect while holding."]
+    max-level: 3
+    cost: {base: 2000, increase: 3000}
+
+  haste:
+    enabled: true
+    name: "<yellow>Haste"
+    icon: GLOWSTONE_DUST
+    slot: 13
+    description: ["<gray>Haste effect while holding."]
+    max-level: 3
+    cost: {base: 2500, increase: 4000}
+
+  explosive:
+    enabled: true
+    name: "<red>Explosive"
+    icon: TNT
+    slot: 14
+    description: ["<gray>Chance to blow up the", "<gray>blocks around you.", "<gray>Max: <red>40%</red> chance, radius 6"]
+    max-level: 1000
+    chance: {base: 1, per-level: 0.039, max: 40}
+    radius: {base: 2, levels-per-increase: 250, max: 6}
+    # at most one explosion per player this often (keeps the server smooth)
+    cooldown-ms: 250
+    cost: {base: 100, increase: 48}
+
+  jackhammer:
+    enabled: true
+    name: "<gold>Jackhammer"
+    icon: ANVIL
+    slot: 15
+    description: ["<gray>Chance to break the", "<gray>entire mine layer.", "<gray>Max: <gold>100%</gold> chance"]
+    max-level: 1000
+    chance: {base: 0.5, per-level: 0.0995, max: 100}
+    # at most one layer per player this often (keeps the server smooth)
+    cooldown-ms: 500
+    # share of the blocks a layer breaks that also roll Token Finder
+    finder-share: 0.03
+    # ...and Key Finder (1/30 of the token share; single blocks keep their normal Key Finder chance, max 2%)
+    key-finder-share: 0.00005
+    cost: {base: 100, increase: 78}
+
+  token-finder:
+    enabled: true
+    name: "<yellow>Token Finder"
+    icon: SUNFLOWER
+    slot: 16
+    description: ["<gray>Chance to find extra tokens.", "<gray>Max: <yellow>50%</yellow> chance, x5 tokens"]
+    max-level: 1000
+    # Starts at 10% and grows to 50% at max level; finds get bigger with level (x5 at max)
+    chance: {base: 10, per-level: 0.04, max: 50}
+    tokens: {min: 100, max: 500, bonus-per-level: 0.004}
+    message: true
+    cost: {base: 50, increase: 48}
+
+  key-finder:
+    enabled: true
+    name: "<aqua>Key Finder"
+    icon: TRIPWIRE_HOOK
+    slot: 22
+    description: ["<gray>Chance to find crate keys.", "<gray>Max: <aqua>2%</aqua> per block", "<gray>Odds per crate: crates.yml > key-finder"]
+    max-level: 500
+    chance: {base: 0.05, per-level: 0.0039, max: 2}
+    cost: {base: 200, increase: 78}
+
+  merchant:
+    enabled: true
+    name: "<green>Merchant"
+    icon: EMERALD
+    slot: 20
+    description: ["<gray>Multiplies all money you get", "<gray>from selling (bag, /sell, autosell).", "<gray>Max: <green>x3</green> money"]
+    max-level: 1000
+    # level 1000 = 1 + 1000 * 0.002 = x3
+    multiplier-per-level: 0.002
+    cost: {base: 150, increase: 90}
+
+  replicator:
+    enabled: true
+    name: "<gradient:#ff7af5:#7afcff>Replicator</gradient>"
+    icon: RECOVERY_COMPASS
+    slot: 24
+    description: ["<gray>Copies matter: multiplies every", "<gray>block you mine (more ores, more money)", "<gray>- but your Ore Bag fills much faster.", "<light_purple>Unlocks at Prestige 7.", "<gray>Max: <light_purple>x4</light_purple> drops"]
+    min-prestige: 7
+    max-level: 1000
+    # level 1000 = 1 + 1000 * 0.003 = x4 drops
+    multiplier-per-level: 0.003
+    cost: {base: 5000, increase: 3000}
+
+  token-fortune:
+    enabled: true
+    name: "<gold>Token Fortune"
+    icon: GOLD_NUGGET
+    slot: 25
+    description: ["<gray>Fortune for tokens: multiplies", "<gray>every token you earn.", "<gray>Unlocks with a Stone pickaxe.", "<gray>Max: <yellow>x11</yellow> tokens"]
+    max-level: 1000
+    multiplier-per-level: 0.01
+    cost: {base: 100, increase: 60}

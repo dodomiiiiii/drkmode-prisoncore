@@ -1,0 +1,44 @@
+# =========================================================
+#  Ore Bag: everything you mine goes in here first.
+#  Autosell only runs every config.yml > autosell.interval-minutes (15), so between sales everything
+#  you mine has to fit in the bag + inventory. When both are full, blocks are lost.
+#  cost for next level = cost.base * (1 + cost.growth)^level + cost.increase * level
+#  currency: money | tokens
+# =========================================================
+enabled: true
+
+item:
+  # Everyone gets a bag on join/respawn if they don't have one.
+  give-if-missing: true
+  material: LEATHER
+  # The look of the item. "minecraft:bundle" = vanilla bag. Later you can point this
+  # at a custom model from a server resource pack (e.g. "prison:ore_bag").
+  model: "minecraft:bundle"
+  name: "<gradient:#c8a26b:#f1d9a7><b>Ore Bag</b></gradient>"
+
+menu:
+  title: "<dark_gray>Ore Bag"
+
+space:
+  # space = base * (1 + growth)^level  -> 10K, 11.2K ... lvl 25 ~170K, lvl 50 ~2.9M, lvl 75 ~49M, lvl 100 ~836M
+  base: 10000
+  growth: 0.12
+  max-level: 100
+  currency: money
+  # lvl 1 $100K ... lvl 25 ~$6M, lvl 50 ~$390M, lvl 75 ~$24B, lvl 100 ~$1.5T
+  # prestige-multiplier: cost x2 per prestige (matches the x2 sell per prestige)
+  cost: {base: 100000, growth: 0.18, increase: 0, prestige-multiplier: 2}
+
+multiplier:
+  # Bag sales are multiplied by 1 + per-level * level  (lvl 50 = x3)
+  # ...but ONLY when autosell (the timer) sells the bag. /sell by hand pays the plain price, so players
+  # want a bag big enough to hold everything until autosell. manual-sell: true = /sell gets it too.
+  manual-sell: false
+  per-level: 0.04
+  max-level: 50
+  currency: tokens
+  # lvl 1 25K ... lvl 25 ~770K, lvl 50 ~24M tokens
+  cost: {base: 25000, growth: 0.15, increase: 0}
+
+autosell:
+  unlock-cost: 25000

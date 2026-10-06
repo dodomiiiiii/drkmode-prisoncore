@@ -1,0 +1,128 @@
+# All messages use MiniMessage. Set a message to "" to disable it.
+prefix: "<dark_gray>[<gold><b>Prison</b></gold>]</dark_gray> <gray>"
+
+general:
+  players-only: "<red>Only players can do that."
+  no-permission: "<red>You don't have permission."
+  player-not-found: "<red>Player not found."
+  invalid-amount: "<red>Invalid amount."
+  unknown-rank: "<red>Unknown rank."
+
+rankup:
+  success: "You ranked up to {prefix}<gray>! <dark_gray>(-${cost})"
+  max-success: "You ranked up <white>{count}</white> times to {prefix}<gray>!"
+  last-rank: "You're at the last rank! Use <yellow>/prestige</yellow>."
+  not-enough: "<red>You need <green>${cost}</green> to rank up. <gray>(Missing <green>${need}</green>)"
+
+prestige:
+  not-last-rank: "<red>You must be rank <white>{rank}</white> to prestige."
+  maxed: "<red>You are already max prestige!"
+  not-enough: "<red>You need <green>${cost}</green> to prestige. <gray>(Missing <green>${need}</green>)"
+  confirm: "Prestige <light_purple>{prestige}</light_purple> costs <green>${cost}</green> and resets you to the first rank.<newline><click:run_command:'/prestige confirm'><hover:show_text:'Click to prestige'><green><b>[CLICK TO CONFIRM]</b></green></hover></click> <gray>or type <yellow>/prestige confirm"
+  success: "<light_purple><b>PRESTIGE!</b></light_purple> <gray>You are now prestige <light_purple>{prestige}</light_purple>."
+  broadcast: "<light_purple>{player}</light_purple> just reached <light_purple><b>Prestige {prestige}</b></light_purple>!"
+
+sell:
+  nothing: "<red>You have nothing to sell."
+  sold: "Sold <white>{items}</white> items for <green>${money}</green> <dark_gray>(x{multiplier})"
+  inventory-full: "<red>Your inventory is full! <gray>Use <yellow>/sellall</yellow> or <yellow>/autosell</yellow>."
+  bag-full-timed: "<red><b>BAG FULL</b> <gray>- blocks are being lost! <yellow>/sell</yellow> or upgrade your bag <dark_gray>(autosell in {time})"
+  autosell-on: "Autosell <green>enabled</green>."
+  autosell-off: "Autosell <red>disabled</red>."
+
+economy:
+  balance: "<white>{player}</white>'s balance: <green>${amount}</green> <dark_gray>({exact})"
+  tokens: "<white>{player}</white>'s tokens: <yellow>{amount}</yellow> <dark_gray>({exact})"
+  pay-usage: "<red>Usage: /pay <player> <amount>"
+  token-pay-usage: "<red>Usage: /tokens pay <player> <amount>"
+  pay-self: "<red>You can't pay yourself."
+  not-enough: "<red>You don't have enough."
+  paid: "You sent <white>{amount}</white> to <white>{player}</white>."
+  received: "You received <white>{amount}</white> from <white>{player}</white>."
+
+mine:
+  reset: "Mine <white>{mine}</white> has been reset!"
+  no-access: "<red>You need rank <white>{rank}</white> to use mine <white>{mine}</white>."
+  none: "<red>There are no mines you can access yet."
+  unknown: "<red>Unknown mine."
+  teleported: "Teleported to mine <white>{mine}</white>."
+  pos-set: "{pos} set to <white>{x}, {y}, {z}</white>."
+  need-selection: "<red>Set both corners first: look at a block and use /mine pos1 and /mine pos2."
+  exists: "<red>A mine with that name already exists."
+  created: "Mine <white>{mine}</white> created (<white>{blocks}</white> blocks) with its bedrock box. Spawn set to your location. Change blocks with <yellow>/mine setblocks</yellow> or <yellow>/mine preset</yellow>."
+  deleted: "Mine <white>{mine}</white> deleted (blocks were left in place)."
+  reset-forced: "Resetting mine <white>{mine}</white>..."
+  updated: "Mine <white>{mine}</white> updated."
+  bad-block: "<red>Invalid block: {block}"
+  shell-built: "Built the bedrock box around <white>{mine}</white> (<white>{blocks}</white> blocks changed)."
+  no-preset: "<red>No preset named <white>{preset}</white> in config.yml > mine-presets."
+  preset-applied: "Mine <white>{mine}</white> now uses the <white>{preset}</white> block mix."
+  list: "Mines: <white>{mines}"
+  info: "<white>{mine}</white> <dark_gray>|</dark_gray> rank: <white>{rank}</white> <dark_gray>|</dark_gray> size: <white>{size}</white> <dark_gray>|</dark_gray> mined: <white>{mined}%</white> <dark_gray>|</dark_gray> reset in: <white>{timer}s</white><newline><gray>Blocks: <white>{blocks}"
+  help: "<gold>Mine admin:</gold><newline><yellow>/mine pos1</yellow>, <yellow>/mine pos2</yellow> <gray>- look at the two corners<newline><yellow>/mine create <name></yellow> <gray>- create (stand where players should spawn)<newline><yellow>/mine setblocks <mine> STONE:60 COAL_ORE:40<newline><yellow>/mine setrank <mine> <rank|none><newline><yellow>/mine settimer <mine> <seconds></yellow> <gray>| <yellow>/mine setpercent <mine> <percent><newline><yellow>/mine setspawn|reset|info|delete <mine><newline><yellow>/mine seticon <mine> [material]</yellow> <gray>| <yellow>/mine setname <mine> <display name><newline><yellow>/mine shell <mine></yellow> <gray>- bedrock box (walls + floor) with a 1-block air gap<newline><yellow>/mine preset <mine> [preset]</yellow> <gray>- use a block mix from config.yml"
+
+enchant:
+  hold-pickaxe: "<red>Hold your prison pickaxe. Lost it? Use <yellow>/pickaxe</yellow>."
+  maxed: "<red>{enchant} <red>is already maxed."
+  not-enough: "<red>You need <yellow>{cost}</yellow> tokens."
+  upgraded: "Upgraded {enchant} <gray>to <white>{level}</white> for <yellow>{cost}</yellow> tokens."
+  token-finder: "<yellow>+{tokens} tokens <gray>(Token Finder)"
+  key-finder: "<aqua><b>KEY FINDER!</b></aqua> <gray>You found a {crate} <gray>key!"
+  proc: "{enchant} <gray>broke <white>{blocks}</white> blocks <dark_gray>|</dark_gray> <green>+${money}"
+
+bag:
+  empty: "<red>Your bag is empty."
+  sold: "Sold your bag for <green>${money}</green> <dark_gray>(x{multiplier})"
+  autosold: "<gold>Bag full - auto-sold <white>{items}</white> items for <green>${money}"
+  emptied: "Moved <white>{items}</white> items into your inventory."
+  no-room: "<red>No room in your inventory."
+  deposited: "Put <white>{items}</white> items into your bag."
+  nothing-to-deposit: "<red>Nothing to put in the bag. <gray>(Only plain ores and blocks go in)"
+  full: "<red>Your bag is full. <gray>Sell it or upgrade its space."
+  upgraded: "Bag upgraded <white>{levels}</white> level(s) for <yellow>{cost}</yellow> tokens."
+  cant-upgrade: "<red>Can't upgrade: not enough tokens or already maxed."
+  autosell-unlocked: "<gold>Bag Autosell unlocked!</gold> <gray>Your bag now sells itself when full."
+
+condense:
+  actionbar: "<aqua>Condensed: <white>{items}"
+  nothing: "<red>Nothing to condense. <gray>You need 64 of an item to make the next tier."
+
+fly:
+  enabled: "Flight <green>enabled</green>."
+  disabled: "Flight <red>disabled</red>."
+  enabled-other: "Flight <green>enabled</green> for <white>{player}</white>."
+  disabled-other: "Flight <red>disabled</red> for <white>{player}</white>."
+  creative: "<red>That player is in creative/spectator and can already fly."
+
+pickaxe:
+  already-have: "<red>You already have a prison pickaxe."
+  given: "Here's your prison pickaxe! Right-click it to upgrade."
+  inventory-full: "<red>Your inventory is full, so you didn't get a prison pickaxe. Make room and use <yellow>/pickaxe</yellow>."
+
+crate:
+  need-key: "<red>You need a {crate} <red>key in your hand. <gray>(Left-click to preview)"
+  won: "You won <white>{reward}</white> from {crate}<gray>!"
+  broadcast: "<white>{player}</white> won <gold>{reward}</gold> from {crate}<gray>!"
+  mass-opened: "Opened <white>{amount}</white> {crate} <gray>keys:"
+  mass-line: " <dark_gray>»</dark_gray> <white>{count}x</white> <gray>{reward}"
+  help: "<gold>Crate admin:</gold><newline><yellow>/crate set <crate></yellow> <gray>- look at a block (chest etc.)<newline><yellow>/crate remove</yellow> <gray>- look at a crate<newline><yellow>/crate givekey <player|all> <crate> [amount]<newline><yellow>/crate list</yellow>, <yellow>/crate preview <crate>"
+  list: "Crates: <white>{crates}"
+  look-at-block: "<red>Look at a block first."
+  not-a-crate: "<red>That block is not a crate."
+  removed: "Crate removed."
+  unknown: "<red>Unknown crate. Use /crate list."
+  set: "Crate set: {crate}"
+  use-remove: "<red>Use /crate remove while looking at it to remove a crate."
+  keyall: "Everyone received <white>{amount}x</white> {crate} <gray>key!"
+  gave-key: "Gave <white>{amount}x</white> {crate} <gray>key to <white>{player}</white>."
+  received-key: "You received <white>{amount}x</white> {crate} <gray>key!"
+
+admin:
+  help: "<gold>PrisonCore admin:</gold><newline><yellow>/pa give|take|set money|tokens <player> <amount><newline><yellow>/pa setrank <player> <rank></yellow> <gray>| <yellow>/pa setprestige <player> <n><newline><yellow>/pa enchant <player> <enchant> <level></yellow> <gray>(pickaxe in hand)<newline><yellow>/pa reload</yellow> <gray>| <yellow>/pa save"
+  reloaded: "Configs reloaded."
+  saved: "All data saved."
+  balance-updated: "{player}'s {type} is now <white>{amount}</white>."
+  rank-set: "{player} is now rank <white>{rank}</white>."
+  prestige-set: "{player} is now prestige <white>{prestige}</white>."
+  enchant-failed: "<red>Unknown enchant, or the player isn't holding a prison pickaxe."
+  enchant-set: "Set {enchant} to <white>{level}</white> on {player}'s pickaxe."

@@ -1,0 +1,147 @@
+name: PrisonCore
+version: '2.14.0'
+main: com.prisoncore.PrisonCore
+api-version: '1.21'
+description: Core prison systems - mines, ranks, prestige, selling, tokens, pickaxe enchants and crates.
+authors: [PrisonCore]
+softdepend: [Vault, LuckPerms, WorldGuard, PlaceholderAPI]
+
+commands:
+  rankup:
+    description: Rank up to the next rank.
+    aliases: [ru]
+  rankupmax:
+    description: Rank up as many times as you can afford.
+    aliases: [rum, mru, maxrankup, rankmax]
+  prestige:
+    description: Prestige once you reach the last rank.
+  ranks:
+    description: View all ranks.
+  money:
+    description: Check a balance.
+    aliases: [bal, balance]
+  pay:
+    description: Pay money to a player.
+  tokens:
+    description: Check tokens or pay tokens.
+    aliases: [token, tok]
+  prices:
+    description: See what can be sold and for how much.
+    aliases: [worth, sellprices]
+  bag:
+    description: Open your ore bag. /bag sell, /bag deposit.
+    aliases: [orebag, backpack, bp]
+  condense:
+    description: Condense full stacks into the next tier.
+  sellall:
+    description: Sell all sellable blocks.
+    aliases: [sell]
+  autosell:
+    description: Toggle autosell.
+    aliases: [as]
+  mine:
+    description: Teleport to a mine / admin mine tools.
+    aliases: [m]
+  mines:
+    description: Open the mines menu.
+  enchants:
+    description: Open the pickaxe enchant menu.
+    aliases: [e, enchant, upgrade]
+  pickaxe:
+    description: Get your prison pickaxe back.
+    aliases: [pick]
+  fly:
+    description: Toggle flight.
+  cores:
+    description: Cores, the premium currency. /cores pay, /store
+    aliases: [core, coreshop]
+  wardrobe:
+    description: Store full armor sets for a permanent token multiplier.
+    aliases: [sets, armorsets, collection]
+  contraband:
+    description: Contraband - chests, building blocks, lights and food for money.
+    aliases: [shop, cb, smuggler]
+  tutorial:
+    description: Replay the new player tutorial. /tutorial skip ends it.
+  cell:
+    description: Cells - buy one, build, run shops. /cell buy, /cell shop, /cell shops
+    aliases: [cells]
+  menu:
+    description: The Colony Navigator - warps and help.
+    aliases: [nav, navigator, gui]
+  store:
+    description: The Colony Store - ranks and items for Cores.
+    aliases: [buy, webshop]
+  cratefilter:
+    description: Choose crate rewards to auto-delete.
+    aliases: [cfilter, crfilter]
+  citizen:
+    description: Colony Clearance, city ranks bought with Prestige Points.
+    aliases: [colony, clearance]
+  ppoints:
+    description: Your Prestige Points.
+    aliases: [prestigepoints, pp]
+  cosmetics:
+    description: Chat color, name color, title (prefix), suffix and nickname.
+    aliases: [cosmetic, chatcolor, chatcolour, cc, namecolor, namecolour, nc, prefix, title, titles, tags, suffix, suffixes]
+  nick:
+    description: Set a nickname (unlocked by Colony Clearance / donor ranks). /nick <name> | off
+    aliases: [nickname]
+  gems:
+    description: Gem slots, socketing and fusing. /gems give <player> <type|random> [level] [amount] (admin)
+    aliases: [gem, sockets]
+  stats:
+    description: Detailed stats - every multiplier and chance, and where it comes from. /stats [player]
+    aliases: [mystats, statistics, multipliers, boosts, profile]
+  earnings:
+    description: Money and tokens per minute. /earnings toggle
+    aliases: [epm, rates, perminute]
+  pets:
+    description: Your pets.
+    aliases: [pet]
+  pmine:
+    description: Your private mine. /pmine menu for upgrades.
+    aliases: [pm, privatemine, pmines]
+  welcome:
+    description: Welcome a new player (and get a reward).
+    aliases: [wb, wc]
+  crate:
+    description: Crate admin tools.
+    aliases: [crates, cr]
+    permission: prisoncore.admin
+  prisonadmin:
+    description: PrisonCore admin commands.
+    aliases: [pa, prisoncore]
+    permission: prisoncore.admin
+
+permissions:
+  prisoncore.cosmetics.custom:
+    description: /prefix custom <text> and /suffix custom <text>.
+    default: op
+  prisoncore.title.owner:
+    description: The Owner title in /prefix.
+    default: false
+  prisoncore.cosmetics.all:
+    description: Every chat color, title, suffix and /nick.
+    default: op
+  prisoncore.admin:
+    description: All admin commands.
+    default: op
+  prisoncore.build:
+    description: Build/break outside mines.
+    default: op
+  prisoncore.mine.bypass:
+    description: Access every mine regardless of rank.
+    default: op
+  prisoncore.fly:
+    description: Use /fly on yourself.
+    default: op
+  prisoncore.fly.others:
+    description: Use /fly <player>.
+    default: op
+  prisoncore.pmine:
+    description: Own and use a private mine (/pmine).
+    default: true
+  prisoncore.autosell:
+    description: Use /autosell.
+    default: true

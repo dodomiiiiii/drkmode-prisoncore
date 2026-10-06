@@ -1,0 +1,336 @@
+# =========================================================
+#  Crates. Place one with /crate set <id> while looking at a block (chest, ender chest...).
+#  Right-click with key = open | Shift + right-click = open all keys in hand | Left-click = preview + filter
+#  Players click a reward in the preview (or /cratefilter) to auto-delete it whenever they win it.
+#
+#  Reward options:
+#    chance: weight (doesn't have to add up to 100)
+#    item: {material, amount, name, lore}  - icon shown in the GUI
+#    give-item: true  - also give that item
+#    money / tokens   - added directly
+#    commands         - run from console, %player% is replaced
+#    broadcast: true  - announce in chat
+#  Optional per crate: effects: {style: helix, particle, particle-2, item, item-height, item-scale, animate-hologram}
+#  Register a crate block from console: /crate setat <crate> <world> <x> <y> <z>
+# =========================================================
+
+# Rewards with scale-tokens: true are multiplied by (1 + per-rank x rank) x (1 + per-prestige x prestige),
+# and money-rankup gives that fraction of your next rankup/prestige cost - so crates stay worth opening.
+token-scaling:
+  per-rank: 0.15
+  per-prestige: 0.5
+
+# Which keys Key Finder gives (weights)
+key-finder:
+  common: 70
+  rare: 25
+  legendary: 5
+
+crates:
+  common:
+    # 1 = quick ... 4 = grand finale
+    animation-tier: 1
+    display-name: "<gray><b>Common Crate"
+    animation: true
+    key:
+      material: TRIPWIRE_HOOK
+      name: "<gray><b>Common Key"
+      lore: ["<gray>Right-click the Common Crate"]
+    hologram:
+      - "<gray><b>COMMON CRATE"
+      - "<white>Right-click with a key"
+      - "<dark_gray>Left-click: rewards & filter"
+    # floating, spinning custom head above the crate
+    effects:
+      style: none
+      particle: none
+      particle-2: none
+      item: "head:b2bb2483449fb689ab60e776cf9efe22e181cbd7c1bdbd8bb6d91c4d7e2a146b"
+      item-height: 1.5
+      item-scale: 0.75
+      hologram-height: 2.3
+    rewards:
+      money:
+        chance: 24
+        item: {material: PAPER, name: "<green>Money Cache <gray>(3% of your next rankup)"}
+        money-rankup: 0.03
+      tokens:
+        chance: 22
+        item: {material: SUNFLOWER, name: "<yellow>Token Cache"}
+        tokens: 75000
+        scale-tokens: true
+      tokens_big:
+        chance: 8
+        item: {material: SUNFLOWER, amount: 4, name: "<yellow><b>Big Token Cache"}
+        tokens: 300000
+        scale-tokens: true
+      scrap_armor:
+        chance: 18
+        item: {material: CHAINMAIL_CHESTPLATE, name: "<gray>Scrap Exo piece <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% scrap random"]
+      plasma_armor:
+        chance: 5
+        item: {material: LEATHER_CHESTPLATE, name: "<light_purple>Plasma Weave piece <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% plasma random"]
+      pet_capsule:
+        chance: 10
+        item: {material: HEART_OF_THE_SEA, head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4", name: "<gradient:#7afcff:#b36bff>Pet Capsule"}
+        commands: ["pa givepet %player% 1"]
+      rare_key:
+        chance: 11
+        item: {material: TRIPWIRE_HOOK, name: "<aqua>Rare Key"}
+        commands: ["crate givekey %player% rare 1"]
+      legendary_key:
+        chance: 2
+        item: {material: TRIPWIRE_HOOK, name: "<gold>Legendary Key"}
+        commands: ["crate givekey %player% legendary 1"]
+        broadcast: true
+
+  rare:
+    # 1 = quick ... 4 = grand finale
+    animation-tier: 2
+    display-name: "<aqua><b>Rare Crate"
+    animation: true
+    key:
+      material: TRIPWIRE_HOOK
+      name: "<aqua><b>Rare Key"
+      lore: ["<gray>Right-click the Rare Crate"]
+    hologram:
+      - "<aqua><b>RARE CRATE"
+      - "<white>Right-click with a key"
+      - "<dark_gray>Left-click: rewards & filter"
+    # floating, spinning custom head above the crate
+    effects:
+      style: none
+      particle: none
+      particle-2: none
+      item: "head:6881309256a064135c09d48b738881c702e9cdc13062dc9927cec4ec4fe5ed7b"
+      item-height: 1.5
+      item-scale: 0.75
+      hologram-height: 2.3
+    rewards:
+      money:
+        chance: 18
+        item: {material: GOLD_INGOT, name: "<green>Money Vault <gray>(12% of your next rankup)"}
+        money-rankup: 0.12
+      tokens:
+        chance: 18
+        item: {material: SUNFLOWER, name: "<yellow>Token Vault"}
+        tokens: 750000
+        scale-tokens: true
+      tokens_big:
+        chance: 7
+        item: {material: SUNFLOWER, amount: 4, name: "<yellow><b>Big Token Vault"}
+        tokens: 3000000
+        scale-tokens: true
+      plasma_armor:
+        chance: 22
+        item: {material: LEATHER_CHESTPLATE, name: "<light_purple>Plasma Weave piece <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% plasma random"]
+      quantum_armor:
+        chance: 4
+        item: {material: NETHERITE_HELMET, name: "<gradient:#7afcff:#3ab8ff>Quantum Aegis piece <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% quantum random"]
+        broadcast: true
+      pet_capsule:
+        chance: 12
+        item: {material: HEART_OF_THE_SEA, head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4", name: "<gradient:#7afcff:#b36bff>Pet Capsule"}
+        commands: ["pa givepet %player% 1"]
+      pet_capsules:
+        chance: 4
+        item: {material: HEART_OF_THE_SEA, head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4", amount: 3, name: "<gradient:#7afcff:#b36bff>3x Pet Capsule"}
+        commands: ["pa givepet %player% 3"]
+      cores:
+        chance: 4
+        item: {material: HEART_OF_THE_SEA, head: "b3ffe26b57f6afd20a07198ebff24a272abe6518c676af54b9321b09d13d6e63", name: "<#3ab8ff>◉ <#7fd8ff>10 Cores"}
+        commands: ["pa give cores %player% 10"]
+        broadcast: true
+      legendary_key:
+        chance: 11
+        item: {material: TRIPWIRE_HOOK, name: "<gold>Legendary Key"}
+        commands: ["crate givekey %player% legendary 1"]
+        broadcast: true
+
+  legendary:
+    # 1 = quick ... 4 = grand finale
+    animation-tier: 3
+    display-name: "<gold><b>Legendary Crate"
+    animation: true
+    key:
+      material: TRIPWIRE_HOOK
+      name: "<gold><b>Legendary Key"
+      lore: ["<gray>Right-click the Legendary Crate"]
+    hologram:
+      - "<gradient:#ffd166:#ef476f><b>LEGENDARY CRATE"
+      - "<white>Right-click with a key"
+      - "<dark_gray>Left-click: rewards & filter"
+    # floating, spinning custom head above the crate
+    effects:
+      style: none
+      particle: none
+      particle-2: none
+      item: "head:6d75b501e4ce5a5e7bcced4386df0e05ed254f99808d2b933121a5ef993d3e37"
+      item-height: 1.5
+      item-scale: 0.75
+      hologram-height: 2.3
+    rewards:
+      quantum_armor:
+        chance: 24
+        item: {material: NETHERITE_CHESTPLATE, name: "<gradient:#7afcff:#3ab8ff>Quantum Aegis piece <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% quantum random"]
+        broadcast: true
+      plasma_armor:
+        chance: 10
+        item: {material: LEATHER_HELMET, name: "<light_purple>Plasma Weave piece <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% plasma random"]
+      pet_capsules:
+        chance: 14
+        item: {material: HEART_OF_THE_SEA, head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4", amount: 2, name: "<gradient:#7afcff:#b36bff>2x Pet Capsule"}
+        commands: ["pa givepet %player% 2"]
+      pet_capsules_big:
+        chance: 4
+        item: {material: HEART_OF_THE_SEA, head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4", amount: 5, name: "<gradient:#7afcff:#b36bff>5x Pet Capsule"}
+        commands: ["pa givepet %player% 5"]
+        broadcast: true
+      tokens:
+        chance: 14
+        item: {material: SUNFLOWER, amount: 5, name: "<yellow>Token Hoard"}
+        tokens: 10000000
+        scale-tokens: true
+      money:
+        chance: 12
+        item: {material: GOLD_BLOCK, name: "<green>Money Hoard <gray>(40% of your next rankup)"}
+        money-rankup: 0.4
+      cores:
+        chance: 6
+        item: {material: HEART_OF_THE_SEA, head: "b3ffe26b57f6afd20a07198ebff24a272abe6518c676af54b9321b09d13d6e63", amount: 3, name: "<#3ab8ff>◉ <#7fd8ff>50 Cores"}
+        commands: ["pa give cores %player% 50"]
+        broadcast: true
+      jackpot_tokens:
+        chance: 4
+        item: {material: SUNFLOWER, name: "<yellow><b>JACKPOT Tokens"}
+        tokens: 60000000
+        scale-tokens: true
+        broadcast: true
+      rare_keys:
+        chance: 5
+        item: {material: TRIPWIRE_HOOK, amount: 5, name: "<aqua>5x Rare Key"}
+        commands: ["crate givekey %player% rare 5"]
+
+  vote:
+    # 1 = quick ... 4 = grand finale
+    animation-tier: 1
+    display-name: "<green><b>Vote Crate"
+    animation: true
+    key:
+      material: TRIPWIRE_HOOK
+      name: "<green><b>Vote Key"
+      lore: ["<gray>Right-click the Vote Crate", "<dark_gray>Earned by voting for the server"]
+    hologram:
+      - "<green><b>VOTE CRATE"
+      - "<gray>Earn keys by voting for us"
+      - "<white>Right-click with a key"
+      - "<dark_gray>Left-click: rewards & filter"
+    # floating, spinning custom head above the crate
+    effects:
+      style: none
+      particle: none
+      particle-2: none
+      item: "head:f71b3617402a311c09a2d9b7c788b68e73c4e70b6957c542b40202337d45c19c"
+      item-height: 1.5
+      item-scale: 0.75
+      hologram-height: 2.3
+    rewards:
+      money:
+        chance: 25
+        item: {material: EMERALD, name: "<green>Voter Payout <gray>(5% of your next rankup)"}
+        money-rankup: 0.05
+      tokens:
+        chance: 25
+        item: {material: SUNFLOWER, name: "<yellow>Voter Tokens"}
+        tokens: 200000
+        scale-tokens: true
+      common_keys:
+        chance: 18
+        item: {material: TRIPWIRE_HOOK, amount: 2, name: "<gray>2x Common Key"}
+        commands: ["crate givekey %player% common 2"]
+      rare_key:
+        chance: 12
+        item: {material: TRIPWIRE_HOOK, name: "<aqua>Rare Key"}
+        commands: ["crate givekey %player% rare 1"]
+      scrap_armor:
+        chance: 9
+        item: {material: CHAINMAIL_BOOTS, name: "<gray>Scrap Exo piece <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% scrap random"]
+      pet_capsule:
+        chance: 8
+        item: {material: HEART_OF_THE_SEA, head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4", name: "<gradient:#7afcff:#b36bff>Pet Capsule"}
+        commands: ["pa givepet %player% 1"]
+      cores:
+        chance: 3
+        item: {material: HEART_OF_THE_SEA, head: "b3ffe26b57f6afd20a07198ebff24a272abe6518c676af54b9321b09d13d6e63", name: "<#3ab8ff>◉ <#7fd8ff>5 Cores"}
+        commands: ["pa give cores %player% 5"]
+
+  season:
+    # 1 = quick ... 4 = grand finale
+    animation-tier: 4
+    # every Season Key gives this many rewards (all shown in the animation)
+    rewards-per-key: 3
+    display-name: "<gradient:#ff7af5:#7afcff><b>Season Crate</b></gradient>"
+    animation: true
+    key:
+      material: AMETHYST_SHARD
+      name: "<gradient:#ff7af5:#7afcff><b>Season Key</b></gradient>"
+      lore: ["<gray>Right-click the Season Crate", "<light_purple>Season 1 <dark_gray>• Nebula Vanguard"]
+    hologram:
+      - "<gradient:#ff7af5:#7afcff:#ff7af5><b>✦ SEASON CRATE ✦</b></gradient>"
+      - "<light_purple>Season 1 <dark_gray>• <gradient:#ff7af5:#7afcff>Nebula Vanguard</gradient>"
+      - "<gold><b>3 rewards per key!"
+      - "<white>Right-click with a Season Key"
+      - "<dark_gray>Left-click: rewards & filter"
+    # spinning star, particle helix and a flowing gradient hologram
+    effects:
+      style: helix
+      particle: END_ROD
+      particle-2: WITCH
+      item: NETHER_STAR
+      item-height: 3.35
+      item-scale: 0.9
+      item-glow: false
+      animate-hologram: true
+    rewards:
+      nebula_armor:
+        chance: 28
+        item: {material: NETHERITE_CHESTPLATE, name: "<gradient:#ff7af5:#7afcff>Nebula Vanguard piece <dark_gray>[S1] <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% nebula random"]
+        broadcast: true
+      quantum_armor:
+        chance: 14
+        item: {material: NETHERITE_HELMET, name: "<gradient:#7afcff:#3ab8ff>Quantum Aegis piece <dark_gray>(random quality)"}
+        commands: ["pa givearmor %player% quantum random"]
+      pet_capsules:
+        chance: 15
+        item: {material: HEART_OF_THE_SEA, head: "9aab01a5d9512e3175bf3af2edbfd59419dc5662605c42c91730e711254efcc4", amount: 3, name: "<gradient:#7afcff:#b36bff>3x Pet Capsule"}
+        commands: ["pa givepet %player% 3"]
+      legendary_keys:
+        chance: 12
+        item: {material: TRIPWIRE_HOOK, amount: 3, name: "<gold>3x Legendary Key"}
+        commands: ["crate givekey %player% legendary 3"]
+      cores:
+        chance: 10
+        item: {material: HEART_OF_THE_SEA, head: "b3ffe26b57f6afd20a07198ebff24a272abe6518c676af54b9321b09d13d6e63", amount: 2, name: "<#3ab8ff>◉ <#7fd8ff>25 Cores"}
+        commands: ["pa give cores %player% 25"]
+      tokens:
+        chance: 10
+        item: {material: SUNFLOWER, amount: 10, name: "<yellow>Season Token Hoard"}
+        tokens: 25000000
+        scale-tokens: true
+      money:
+        chance: 9
+        item: {material: GOLD_BLOCK, name: "<green>Season Money Hoard <gray>(75% of your next rankup)"}
+        money-rankup: 0.75
+      jackpot:
+        chance: 2
+        item: {material: NETHER_STAR, name: "<gradient:#ff7af5:#7afcff><b>JACKPOT: 100 Cores + 5x Legendary Key"}
+        commands: ["pa give cores %player% 100", "crate givekey %player% legendary 5"]
+        broadcast: true
